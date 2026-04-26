@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRMDO ASUNCION</title>
+    <style>
+        :root { --sidebar: #1e293b; --primary: #3b82f6; --bg: #f8fafc; --text: #334155; --accent: #4ade80; }
+        body { font-family: 'Inter', sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg); color: var(--text); overflow: hidden; }
+        
+        /* --- Welcome Screen --- */
+        #welcome-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #0f172a; 
+        }
+        #welcome-screen::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('1.JPG');
+            background-size: cover; background-position: center;
+            opacity: 0.1; z-index: -1;
+        }
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px; border-radius: 20px; display: flex; align-items: center; gap: 50px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); max-width: 700px; width: 90%;
+            backdrop-filter: blur(10px);
+        }
+        .welcome-left { display: flex; flex-direction: column; align-items: center; border-right: 2px solid #e5e7eb; padding-right: 50px; }
+        .welcome-left img { width: 140px; margin-bottom: 20px; }
+        .brand-name { font-size: 1.5rem; font-weight: 900; color: #1e293b; text-align: center; }
+        .welcome-right { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .btn-get-started {
+            background: var(--primary); color: white; border: none; padding: 18px 50px; 
+            border-radius: 50px; font-weight: 800; cursor: pointer; font-size: 1.2rem; transition: 0.3s;
+        }
+        .btn-get-started:hover { transform: translateY(-3px); background: #2563eb; }
+
+        /* --- Dashboard --- */
+        .sidebar { width: 260px; background: var(--sidebar); color: white; display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar-header { padding: 25px; font-size: 1.2rem; font-weight: 800; border-bottom: 1px solid #334155; }
+        .menu-item { padding: 15px 25px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.3s; }
+        .menu-item:hover, .menu-item.active { background: #334155; border-left: 4px solid var(--primary); }
+        .main-content { flex: 1; overflow-y: auto; padding: 40px; opacity: 0; transition: 0.5s; }
+        .page { display: none; max-width: 1000px; margin: 0 auto; }
+        .page.active { display: block; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        label { font-weight: 600; font-size: 0.8rem; display: block; margin-bottom: 8px; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; background: white; }
+        .total-banner { background: var(--sidebar); color: white; padding: 20px; border-radius: 10px; text-align: center; margin-top: 25px; }
+        .total-num { font-size: 2.2rem; color: var(--accent); display: block; font-weight: 800; }
+        .btn-save { width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 20px; }
+        .slide-up { transform: translateY(-100%); }
+        .fade-in { opacity: 1 !important; }
+    </style>
+</head>
+<body>
+
+    <div id="welcome-screen">
+        <div class="welcome-card">
+            <div class="welcome-left">
+                <img src="LOGO.png" alt="Asuncion Seal">
+                <div class="brand-name">HRMDO ASUNCION</div>
+            </div>
+            <div class="welcome-right">
+                <div style="font-size: 2rem; font-weight: 800; margin-bottom: 10px; color: #1e293b;">Welcome</div>
+                <div style="font-size: 1rem; color: #64748b; margin-bottom: 30px;">Interview Rating Tool Access</div>
+                <button class="btn-get-started" onclick="startApp()">GET STARTED</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">HRMDO ASUNCION</div>
+        <div class="menu-item active" onclick="showPage('rating', this)">Rating Tool</div>
+        <div class="menu-item" onclick="showPage('analytics', this); loadCloudData();">Analytics</div>
+    </div>
+
+    <div class="main-content" id="main-app">
+        <div id="rating" class="page active">
+            <h1>INTERVIEW RATING</h1>
+            <div class="card">
+                <div class="grid">
+                    <div><label>Applicant Name</label><input type="text" id="name" placeholder="Full Name"></div>
+                    <div>
+                        <label>Position Applied For</label>
+                        <select id="pos">
+                            <option value="">Select Position</option>
+                            <option value="HUMAN RESOURCE MANAGEMENT V">HUMAN RESOURCE MANAGEMENT V</option>
+                            <option value="Administrative Officer III">Administrative Officer III</option>
+                            <option value="Administrative Officer I">Administrative Officer I</option>
+                            <option value="Medical Officer IV">Medical Officer IV</option>
+                            <option value="Midwife II">Midwife II</option>
+                        </select>
+                    </div>
+                    <div><label>Interviewer Name</label><input type="text" id="int" placeholder="Interviewer Name"></div>
+                    <div><label>Date</label><input type="date" id="date"></div>
+                </div>
+                <table style="width:100%; border-collapse:collapse">
+                    <thead><tr><th style="text-align:left; padding:12px; background:#f1f5f9">Criteria</th><th style="width:150px; background:#f1f5f9">Score (1-5)</th></tr></thead>
+                    <tbody id="rubric-body"></tbody>
+                </table>
+                <div class="total-banner">FINAL RATING SCORE<span class="total-num" id="total-val">0</span><small>OUT OF 35</small></div>
+                <button class="btn-save" id="saveBtn" onclick="submitData()">SAVE & SYNC RECORDS</button>
+            </div>
+        </div>
+
+        <div id="analytics" class="page">
+            <h1>Assessment Records</h1>
+            <div class="card">
+                <table style="width:100%; border-collapse:collapse">
+                    <thead><tr style="background:#f1f5f9; text-align: left;"><th>Applicant</th><th>Position</th><th>Interviewer</th><th>Score</th></tr></thead>
+                    <tbody id="history-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycby7ReKLqmqUCHWioCjEkeXIOPizJh8J-sy7CJzgQXBbDBLdp0qqhTVG8pdnsQWx8mjK/exec";
+    
+    const criteria = [
+        { name: "Communication Skills", desc: "Ideas clearly, confidently, and persuasively." },
+        { name: "Job Knowledge/Technical Competence", desc: "Understanding of functions and procedures." },
+        { name: "Work Experience & Accomplishments", desc: "Relevant background and accomplishments." },
+        { name: "Problem Solving & Decision-Making", desc: "Logical analysis and ethical solutions." },
+        { name: "Commitment to Public Service & Ethical Standards", desc: "RA 6713 values and integrity." },
+        { name: "Interpersonal Relations & Teamwork", desc: "Harmonious work and respect." },
+        { name: "Personality, Attitude, & Professional Demeanor", desc: "Confidence, enthusiasm, and poise." }
+    ];
+
+    function startApp() {
+        document.getElementById('welcome-screen').classList.add('slide-up');
+        document.getElementById('main-app').classList.add('fade-in');
+    }
+
+    function init() {
+        const body = document.getElementById('rubric-body');
+        criteria.forEach((c, i) => {
+            body.innerHTML += `<tr><td style="padding:12px; border-bottom:1px solid #f1f5f9"><strong>${i+1}. ${c.name}</strong><br><small style="color:#94a3b8">${c.desc}</small></td>
+                <td style="padding:12px; border-bottom:1px solid #f1f5f9"><select class="score" style="width:100%; padding:8px; border-radius:5px; font-weight: bold;" onchange="calc()"><option value="0">0</option>${[1,2,3,4,5].map(v => `<option value="${v}">${v}</option>`).join('')}</select></td></tr>`;
+        });
+        document.getElementById('date').valueAsDate = new Date();
+
+        const savedInt = localStorage.getItem('interviewer_name');
+        if (savedInt) { document.getElementById('int').value = savedInt; }
+    }
+
+    function showPage(id, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+        document.getElementById(id).classList.add('active'); el.classList.add('active');
+    }
+
+    function calc() {
+        let t = 0; document.querySelectorAll('.score').forEach(s => t += parseInt(s.value));
+        document.getElementById('total-val').innerText = t;
+    }
+
+    async function submitData() {
+        const btn = document.getElementById('saveBtn');
+        const applicant = document.getElementById('name').value;
+        const interviewer = document.getElementById('int').value;
+        const position = document.getElementById('pos').value;
+
+        if(!applicant || !interviewer || !position) return alert("Please fill Name, Position, and Interviewer.");
+
+        localStorage.setItem('interviewer_name', interviewer);
+        btn.disabled = true; btn.innerText = "Syncing...";
+
+        const data = { name: applicant, pos: position, int: interviewer, date: document.getElementById('date').value, total: document.getElementById('total-val').innerText };
+        
+        fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+        setTimeout(() => { alert("Rating Saved!"); location.reload(); }, 1200);
+    }
+
+    async function loadCloudData() {
+        const tbody = document.getElementById('history-body');
+        try {
+            const res = await fetch(SHEET_URL); const data = await res.json();
+            tbody.innerHTML = data.reverse().map(row => `<tr><td style="padding:12px; border-bottom:1px solid #f1f5f9"><strong>${row[1]}</strong></td><td style="padding:12px; border-bottom:1px solid #f1f5f9">${row[2]}</td><td style="padding:12px; border-bottom:1px solid #f1f5f9">${row[3]}</td><td style="padding:12px; border-bottom:1px solid #f1f5f9"><b>${row[5]} / 35</b></td></tr>`).join('');
+        } catch(e) { tbody.innerHTML = "Error loading records."; }
+    }
+
+    init();
+</script>
+</body>
+</html>
